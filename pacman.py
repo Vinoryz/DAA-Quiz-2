@@ -12,7 +12,7 @@ class PacMan:
         self.pixel_target_x = self.pixel_x
         self.pixel_target_y = self.pixel_y
         
-        self.N_FRAMES_PER_CELL = 8 
+        self.N_FRAMES_PER_CELL = 8
         self.speed = GRID_SIZE / self.N_FRAMES_PER_CELL
         if self.speed <= 0: self.speed = 1 
 

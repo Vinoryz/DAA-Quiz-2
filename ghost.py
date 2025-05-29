@@ -144,3 +144,30 @@ class Ghost:
                            self.pixel_y - effective_radius, 
                            2 * effective_radius, 
                            2 * effective_radius)
+        
+    def get_grid_position(self):
+        return self.grid_x, self.grid_y
+
+# --- Helper functions (outside class) ---
+def manhattan_distance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+def get_ghost_spawn_points(current_game_map, num_ghosts, pacman_grid_pos, min_distance=4):
+    possible_points = []
+    for r_idx, row_val in enumerate(current_game_map):
+        for c_idx, tile_val in enumerate(row_val):
+            if tile_val == 0:
+                if manhattan_distance((c_idx, r_idx), pacman_grid_pos) >= min_distance:
+                    possible_points.append((c_idx, r_idx))
+    random.shuffle(possible_points)
+    spawn_points = possible_points[:min(num_ghosts, len(possible_points))]
+    while len(spawn_points) < num_ghosts:
+        # If not enough points far enough, fill with random points anyway (except player pos)
+        fallback_points = [(c_idx, r_idx) for r_idx, row_val in enumerate(current_game_map)
+                        for c_idx, tile_val in enumerate(row_val) if tile_val == 0 and (c_idx, r_idx) != pacman_grid_pos]
+        if fallback_points:
+            spawn_points.append(random.choice(fallback_points))
+        else:
+            spawn_points.append(pacman_grid_pos)
+    return spawn_points
+

@@ -1,19 +1,24 @@
 # grid.py
 import pygame
 
-GRID_SIZE = 40
-ROWS, COLS = 15, 30
+GRID_SIZE = 20
+ROWS, COLS = 24, 32
+WIDTH = GRID_SIZE * COLS
+HEIGHT = GRID_SIZE * ROWS
 
-def draw_grid(win, visited_nodes, current_map_to_draw, current_targeted_food_coord):
-    """Menggambar grid menggunakan peta yang diberikan dan menandai makanan target."""
-    for y, row in enumerate(current_map_to_draw):
+def draw_grid(win, visited, game_map, target_food=None):
+    for y, row in enumerate(game_map):
         for x, tile in enumerate(row):
-            rect = pygame.Rect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-            if tile == 1: 
-                pygame.draw.rect(win, (0, 0, 200), rect) 
-            elif tile == 2: 
-                if current_targeted_food_coord == (x, y):
-                    pygame.draw.circle(win, (255, 0, 0), rect.center, 7)
-                else:
-                    pygame.draw.circle(win, (255, 255, 0), rect.center, 5)
-            
+            rect = pygame.Rect(x*GRID_SIZE, y*GRID_SIZE, GRID_SIZE, GRID_SIZE)
+
+            if tile == 1:
+                pygame.draw.rect(win, (0,0,255), rect)
+            elif tile == 2:
+                color = (255,0,0) if (x,y) in visited else (255,255,0)
+                pygame.draw.circle(win, color, rect.center, 5)
+            else:
+                pygame.draw.rect(win, (30,30,30), rect)
+
+            if target_food == (x,y):
+                pygame.draw.rect(win, (0,255,0), rect, 3)  # Highlight target food
+
